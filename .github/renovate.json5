@@ -14,10 +14,11 @@
   "semanticCommits": "disabled",
 // All PRs should have a label
   "labels": ["automated"],
-  "regexManagers": [
+  "customManagers": [
     {
 // We want a PR to bump Go versions used through env variables in any Github
 // Actions, taking it from the official Github repository.
+      "customType": "regex",
       "fileMatch": ["^\\.github\\/workflows\\/[^/]+\\.ya?ml$"],
       "matchStrings": [
         "GO_VERSION: '(?<currentValue>.*?)'\\n"
@@ -27,12 +28,23 @@
     }, {
 // We want a PR to bump golangci-lint versions used through env variables in
 // any Github Actions, taking it from the official Github repository tags.
+      "customType": "regex",
       "fileMatch": ["^\\.github\\/workflows\\/[^/]+\\.ya?ml$"],
       "matchStrings": [
         "GOLANGCI_VERSION: '(?<currentValue>.*?)'\\n"
       ],
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "golangci/golangci-lint"
+    }, {
+// Generic customManager to update multiple dependencies
+// We can amend fileMatch for more dependencies
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/)Dockerfile(\\..+)?$",
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-]+?)(?: registryUrl=(?<registryUrl>.+?))? depName=(?<depName>.+?)(?: lookupName=(?<lookupName>.+?))?(?: versioning=(?<versioning>.+?))?\\s.+?_VERSION ?= ?\"?(?<currentValue>.+?)\"?\\s"
+      ]
     }
   ],
 // PackageRules disabled below should be enabled in case of vulnerabilities

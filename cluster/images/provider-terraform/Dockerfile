@@ -3,6 +3,7 @@ RUN apk --no-cache add ca-certificates bash git curl
 ARG TARGETOS
 ARG TARGETARCH
 
+# renovate hashicorp: depName=terraform
 ENV TERRAFORM_VERSION=1.5.5
 ENV TF_IN_AUTOMATION=1
 ENV TF_PLUGIN_CACHE_DIR=/tf/plugin-cache
